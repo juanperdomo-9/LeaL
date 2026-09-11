@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: leal-fc-catalogo
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false

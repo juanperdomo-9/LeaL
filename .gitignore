@@ -1,0 +1,5 @@
+img/source/
+img/crop.py
+node_modules/
+.DS_Store
+Thumbs.db
