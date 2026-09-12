@@ -21,8 +21,11 @@ const Cart = {
 };
 
 function updateCartBadge() {
+  const count = Cart.count();
   const el = document.getElementById("cart-badge");
-  if (el) el.textContent = Cart.count();
+  const elMenu = document.getElementById("menu-cart-badge");
+  if (el) el.textContent = count;
+  if (elMenu) elMenu.textContent = count;
 }
 
 function showToast(msg) {
