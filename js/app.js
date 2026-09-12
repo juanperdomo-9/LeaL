@@ -42,24 +42,85 @@ function showToast(msg) {
 /* ---------------- Layout: navbar + footer (estáticos, se inyectan una vez) ---------------- */
 function renderChrome() {
   document.getElementById("navbar").innerHTML = `
-    <div class="container nav-inner" id="nav-inner">
-      <a href="#/" class="brand">
-        <img class="mark" src="img/logo.png" alt="Escudo LEAL FC"/>
-        <span>LEAL <span class="sub">FÚTBOL CLUB · TEMPORADA 2025</span></span>
-      </a>
-      <nav class="nav-links" id="nav-links">
-        <a href="#/" data-route="home">Inicio</a>
-        ${LEAL_CATEGORIES.map(c => `<a href="#/categoria/${c.id}" data-route="cat-${c.id}">${c.name}</a>`).join("")}
-      </nav>
-      <form class="nav-search" id="search-form">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" id="search-input" placeholder="Buscar productos…" autocomplete="off"/>
-      </form>
-      <a href="#/carrito" class="btn btn-primary" style="padding:10px 16px;">
-        🛒 <span id="cart-badge">0</span>
-      </a>
-      <button class="nav-burger" id="nav-burger"><span></span><span></span><span></span></button>
+<div class="container nav-inner" id="nav-inner">
+
+  <!-- Hamburguesa -->
+  <button class="nav-burger" id="nav-burger" aria-label="Abrir menú">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Logo -->
+  <a href="#/" class="brand">
+    <img class="mark" src="img/logo.png" alt="Escudo LEAL FC"/>
+    <span>
+      LEAL
+      <span class="sub">FÚTBOL CLUB · TEMPORADA 2025</span>
+    </span>
+  </a>
+
+  <!-- Carrito -->
+  <a href="#/carrito" class="btn btn-primary nav-cart">
+    🛒 <span id="cart-badge">0</span>
+  </a>
+
+  <!-- Fondo -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+
+  <!-- Menú -->
+  <aside class="nav-menu" id="nav-menu">
+
+    <button class="nav-close" id="nav-close" aria-label="Cerrar menú">
+      ×
+    </button>
+
+    <div class="nav-menu-brand">
+      <img src="img/logo.png" alt="Escudo LEAL FC"/>
+      <div>
+        <strong>LEAL FC</strong>
+        <span>FÚTBOL CLUB · TEMPORADA 2025</span>
+      </div>
     </div>
+
+    <nav class="nav-menu-links">
+
+      <a href="#/" data-route="home">
+        Inicio
+      </a>
+
+      ${LEAL_CATEGORIES.map(c => `
+        <a href="#/categoria/${c.id}" data-route="cat-${c.id}">
+          ${c.icon} ${c.name}
+        </a>
+      `).join("")}
+
+    </nav>
+
+    <form class="nav-menu-search" id="search-form">
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Buscar productos…"
+        autocomplete="off"
+      />
+    </form>
+
+    <a href="#/carrito" class="nav-menu-cart">
+      🛒 Ver carrito
+      <span id="menu-cart-badge">0</span>
+    </a>
+
+  </aside>
+
+</div>
   `;
 
   document.getElementById("footer").innerHTML = `
@@ -117,8 +178,24 @@ function renderChrome() {
   document.getElementById("search-input").addEventListener("input", e => {
     if (e.target.value.length > 1) location.hash = "#/buscar/" + encodeURIComponent(e.target.value);
   });
-  document.getElementById("nav-burger").addEventListener("click", () => {
-    document.getElementById("nav-inner").classList.toggle("open");
+  const navInner = document.getElementById("nav-inner");
+  const navBurger = document.getElementById("nav-burger");
+  const navClose = document.getElementById("nav-close");
+  const menuOverlay = document.getElementById("menu-overlay");
+
+  navBurger.addEventListener("click", () => {
+    navInner.classList.add("open");
+    document.body.style.overflow = "hidden";
+  });
+
+  navClose.addEventListener("click", () => {
+    navInner.classList.remove("open");
+    document.body.style.overflow = "";
+  });
+
+  menuOverlay.addEventListener("click", () => {
+    navInner.classList.remove("open");
+    document.body.style.overflow = "";
   });
 
   updateCartBadge();
